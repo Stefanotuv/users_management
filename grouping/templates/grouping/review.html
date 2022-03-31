@@ -1,0 +1,407 @@
+{% extends "grouping/base_site_grouping.html" %}
+{% block title %} Review {% endblock title %}
+{% load get_item %}
+
+{% block stylesheets %}
+  {{ block.super }}
+    <style>
+    * { box-sizing: border-box; }
+body {
+  font: 16px Arial;
+}
+.autocomplete {
+  /*the container must be positioned relative:*/
+  position: relative;
+  display: inline-block;
+}
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 8px;
+  font-size: 12px;
+}
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+}
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
+
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+
+
+
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <div class="row tile_count">
+
+
+    </div>
+    <!-- /top tiles -->
+
+    <div class="row">
+
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+              <form autocomplete="off" action="{% url 'project_reviewed_view' pk %}" method="post">
+            {% csrf_token %}
+            <div class="x_title">
+                <h2>Project: {{ project_name }}<small>Review the issues found;  {{ message }}</small></h2>
+                <div style="overflow:auto;">
+                  <div style="float:right;">
+
+                    <button type="submit" id="Btn" onclick="" name="Performs_Checks" value="Performs_Checks">Submit Changes</button>
+
+                  </div>
+                </div>
+              <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+            <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                  <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Table</a>
+                  </li>
+                  <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Review</a>
+                  </li>
+
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                  <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+                    <div class="table-responsive">
+
+                        <table class="table table-striped jambo_table bulk_action" >
+                          <thead>
+                            <tr class="headings" style="border-color: #405467;border-style: solid">
+
+                                {% for header in json_file_headers %}
+                                    <th class="column-title">
+
+                                        <input  name="header_{{ header }}" style="color: #0a0e14" value="{{ header }}">
+
+                                    </th>
+
+                                {% endfor %}
+
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            {% for key,item in json_file_candidates_dictionary.items %}
+                            {% if key in dictionary_candidate_unmatched_fields.keys %}
+                                <tr class="even pointer" style="border-color: #bd1c1c;border-style: solid">
+                              {% for header, element in item.items %}
+                                  {% if header in dictionary_candidate_unmatched_fields|get_item:key %}
+                                        <td class=" " >
+                                            <div class="autocomplete" >
+                                                <input class="autocomplete" id=myInput" name="item_{{ key }}_{{ header }}" style="color: #0a0e14;background-color: orange;" value="{{ element }}">
+                                            </div>
+                                        </td>
+                                  {% else %}
+                                      <td class=" " >
+                                        <div class="autocomplete" >
+                                          <input name="item_{{ key }}_{{ header }}" style="color: #0a0e14;" value="{{ element }}">
+                                        </div>
+                                      </td>
+                                  {% endif %}
+
+                              {% endfor %}
+                            </tr>
+                            {% else %}
+                                <tr class="even pointer" >
+                              {% for header, element in item.items %}
+                                <td class=" " >
+                                      <div class="autocomplete" >
+                                          <input  name="item_{{ key }}_{{ header }}" style="color: #0a0e14" value="{{ element }}">
+                                      </div>
+                                </td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% endfor %}
+
+                          </tbody>
+                        </table>
+                      </div>
+                  </div>
+
+                    <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action">
+                          <thead>
+                            <tr class="headings">
+
+                                {% for header in table_headers %}
+                                    <th class="column-title"  name="header_{{ header }}" style="color: #ffffff" >
+                                        {{ header }}
+                                    </th>
+
+                                {% endfor %}
+
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            {% for key,item in issues_table.items %}
+                            <tr class="even pointer">
+                              {% for header, element in item.items %}
+
+                                  <td class=" ">
+
+                                      <a style="color: #0a0e14">
+                                            {{ element }}
+                                      </a>
+
+                                  </td>
+                              {% endfor %}
+                            </tr>
+                            {% endfor %}
+
+                          </tbody>
+                        </table>
+                      </div>
+                  </div>
+
+                </div>
+              </div>
+    <!--              <p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p>-->
+
+
+
+
+            </div>
+            </form>
+          </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+
+
+    </div>
+
+    <br />
+
+    <div class="row">
+
+    </div>
+
+    <div class="row">
+
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <!-- Chart.js -->
+  <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
+  <!-- gauge.js -->
+  <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
+  <!-- Skycons -->
+  <script src="/static/vendors/skycons/skycons.js"></script>
+  <!-- Flot -->
+  <script src="/static/vendors/Flot/jquery.flot.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.pie.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.time.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.stack.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.resize.js"></script>
+  <!-- Flot plugins -->
+  <script src="/static/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+  <script src="/static/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+  <script src="/static/vendors/flot.curvedlines/curvedLines.js"></script>
+  <!-- DateJS -->
+  <script src="/static/vendors/DateJS/build/date.js"></script>
+  <!-- JQVMap -->
+  <script src="/static/vendors/jqvmap/dist/jquery.vmap.js"></script>
+  <script src="/static/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+  <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+
+    <script>
+    var countries = [
+        {% for nation in nationality_list %}
+            "{{ nation }}",
+        {% endfor %}]
+
+    var job_title =[
+        {% for element in job_title %}
+            "{{ element }}",
+        {% endfor %}]
+    var company = [
+        {% for element in company %}
+            "{{ element }}",
+        {% endfor %}]
+    var professional_category = [
+        {% for element in professional_category %}
+            "{{ element }}",
+        {% endfor %}]
+    var job_function =[
+        {% for element in job_function %}
+            "{{ element }}",
+        {% endfor %}]
+
+    {#autocomplete(document.getElementById("myInput"), countries);#}
+
+    elements = document.querySelectorAll("input[name^='item_candidate']")
+
+    for(i=0;i<elements.length;i++){
+        debugger;
+        if (elements[i].name.includes("Nationality")){
+            autocomplete(elements[i], countries);
+        }
+        else if (elements[i].name.includes("Job Title")){
+            autocomplete(elements[i], job_title);
+        }
+        else if (elements[i].name.includes("Professional")){
+            autocomplete(elements[i], professional_category);
+        }
+        else if (elements[i].name.includes("Company")){
+            autocomplete(elements[i], company);
+        }
+        else if (elements[i].name.includes("Job Function")){
+            autocomplete(elements[i], job_function);
+        }
+
+    }
+
+    {#autocomplete(document.getElementsByName("item_candidate_2_Nationality")[0], countries);#}
+
+
+    function autocomplete(inp, arr) {
+        debugger;
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  var currentFocus;
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+              b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+      x[i].parentNode.removeChild(x[i]);
+    }
+  }
+}
+/*execute a function when someone clicks in the document:*/
+document.addEventListener("click", function (e) {
+    closeAllLists(e.target);
+});
+}
+
+</script>
+
+{% endblock javascripts %}

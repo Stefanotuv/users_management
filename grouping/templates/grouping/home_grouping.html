@@ -1,0 +1,109 @@
+{% extends "grouping/base_site_grouping.html" %}
+{% block title %} Home {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <div class="row tile_count">
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <div class="tile-stats">
+            <div class="icon"><i class="fa fa-upload"></i></div>
+            <div class="count">{{ created_projects }}</div>
+            <h3>Created Projects</h3>
+            <p>Total # of Created Projects</p>
+          </div>
+        </div>
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <div class="tile-stats">
+            <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
+            <div class="count">{{ started_projects }}</div>
+            <h3>Started Projects</h3>
+            <p>Total # of Started Projects</p>
+          </div>
+        </div>
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <div class="tile-stats">
+            <div class="icon"><i class="fa fa-search"></i></div>
+            <div class="count">{{ reviewed_projects }}</div>
+            <h3>Reviewed Projects</h3>
+            <p>Total # of Projects reviewed</p>
+          </div>
+        </div>
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <div class="tile-stats">
+            <div class="icon"><i class="fa fa-check-square-o"></i></div>
+            <div class="count">{{ final_projects }}</div>
+            <h3>Submitted Projects</h3>
+            <p>Total # of Projects submitted</p>
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <div class="tile-stats">
+              <a href="{% url 'createproject' %}">
+            <div class="icon"><i class="fa fa-upload" style="padding-bottom: 5px"></i></div>
+              <div class="count"><i>Create a New Project</i></div>
+            </a>
+          </div>
+
+        </div>
+        <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <div class="tile-stats">
+              <a href="{% url 'viewlist' %}">
+            <div class="icon"><i class="fa fa-list-alt" style="padding-bottom: 5px"></i></div>
+              <div class="count"><i>View Existing Projects</i></div>
+              </a>
+          </div>
+        </div>
+
+    </div>
+    <!-- /top tiles -->
+
+    <div class="row">
+
+
+
+    </div>
+
+    <br />
+
+    <div class="row">
+
+    </div>
+
+    <div class="row">
+
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <!-- Chart.js -->
+  <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
+  <!-- gauge.js -->
+  <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
+  <!-- Skycons -->
+  <script src="/static/vendors/skycons/skycons.js"></script>
+  <!-- Flot -->
+  <script src="/static/vendors/Flot/jquery.flot.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.pie.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.time.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.stack.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.resize.js"></script>
+  <!-- Flot plugins -->
+  <script src="/static/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+  <script src="/static/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+  <script src="/static/vendors/flot.curvedlines/curvedLines.js"></script>
+  <!-- DateJS -->
+  <script src="/static/vendors/DateJS/build/date.js"></script>
+  <!-- JQVMap -->
+  <script src="/static/vendors/jqvmap/dist/jquery.vmap.js"></script>
+  <script src="/static/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+  <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+{% endblock javascripts %}

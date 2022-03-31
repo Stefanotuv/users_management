@@ -42,11 +42,11 @@ class UserLoginAPIView(APIView):
             'iat': datetime.datetime.utcnow()
         }
 
-        token = jwt.encode(payload,'secret',algorithm='HS256').decode('utf-8')
+        token = jwt.encode(payload,'secret',algorithm='HS256') #.decode('utf-8')
 
         response = Response()
 
-        response.set_cookie(key='jwt', value=token,httponly=True)
+        response.set_cookie(key='jwt', value=token, httponly=True)
         response.data ={
             'jwt': token
         }
@@ -61,7 +61,7 @@ class UserAPIView(APIView):
             raise AuthenticationFailed('Unauthenticated User')
 
         try:
-            payload = jwt.decode(token,'secret',algorithm=['HS256'])
+            payload = jwt.decode(token,'secret',algorithms=["HS256"])
 
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Unauthenticated User')

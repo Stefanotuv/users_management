@@ -1,0 +1,6 @@
+[client]
+database = usermanagement
+host = localhost
+user = user
+password = Pinocchi0
+default-character-set = utf8
