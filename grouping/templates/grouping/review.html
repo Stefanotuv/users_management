@@ -259,24 +259,36 @@ input[type=submit] {
         {% for nation in nationality_list %}
             "{{ nation }}",
         {% endfor %}]
-
+    </script>
+    <script>
     var job_title =[
         {% for element in job_title %}
             "{{ element }}",
         {% endfor %}]
+    </script>
+    <script>
     var company = [
         {% for element in company %}
             "{{ element }}",
         {% endfor %}]
+    </script>
+    <script>
     var professional_category = [
         {% for element in professional_category %}
             "{{ element }}",
         {% endfor %}]
+    </script>
+    <script>
     var job_function =[
         {% for element in job_function %}
             "{{ element }}",
         {% endfor %}]
+    </script>
 
+
+
+
+<script>
     {#autocomplete(document.getElementById("myInput"), countries);#}
 
     elements = document.querySelectorAll("input[name^='item_candidate']")

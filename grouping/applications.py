@@ -1,5 +1,5 @@
 # check all the dimensions are on the columns
-
+from .models import *
 default_dimensions = [
     'LBSNo','Stream','Group','First Name','Known Name','Surname','Nationality','Nationality Region','Gender','Age',
     'Relevant Experience','Country of Residence','CoR Region','GMAT Score(total)','Quant','English Mother Tongue',
@@ -9,7 +9,7 @@ default_dimensions = [
     'Macroeconomics Waiver','DAM Waiver','Visa at risk',
 ]
 
-mandatory_dimensions = ["nationality","job_title","company","professional_category","job_function"]
+mandatory_dimensions = ["nationality","job_title","company","professional_category","job_function","GMAT", "Age"]
 
 nationality =[
     'Afghanistan',
@@ -235,7 +235,7 @@ job_function = [
 ]
 
 dictionary_contraints ={
-    "Nationality": nationality,
+    "Nationality": [item.value for item in Nationality.objects.all()],
     "Job Title" : job_title,
     "Company Name": company,
     "Professional Category (PO team)": professional_category,
@@ -290,12 +290,22 @@ class ReviewConstraints():
         return dictionary_candidate_unmatched_fields
 
     def issues_table(self,mandatory_list,input_list,dictionary_candidate, dictionary_contraints):
+        # added the dictionary constraints from the db rather than the default list
+
+        dictionary_contraints_from_DB = {
+            "Nationality": [n.value for n in Nationality.objects.all()],
+            "Job Title":  [JT.value for JT in JobTitle.objects.all()],
+            "Company Name":  [C.value for C in Company.objects.all()],
+            "Professional Category (PO team)":  [PC.value for PC in ProfessionalCategory.objects.all()],
+            "Job Function":  [JF.value for JF in JobFunction.objects.all()],
+        }
+
         # this function should create a table with all the issues that be used to populate the review table
         issues_table = {}
         candidate_with_issues_list = []
         table_headers =['issue type','content','comments']
         missing_headers = self.check_mandatory_fields(mandatory_list,input_list)[1]
-        dictionary_candidate_unmatched_fields = self.check_fields_inclusion(dictionary_candidate, dictionary_contraints, missing_headers)
+        dictionary_candidate_unmatched_fields = self.check_fields_inclusion(dictionary_candidate, dictionary_contraints_from_DB, missing_headers)
         index = 0
         for missing_header in missing_headers:
             issues_table[index] = {
@@ -306,7 +316,7 @@ class ReviewConstraints():
             index = index + 1
         for key,item in dictionary_candidate_unmatched_fields.items():
             issues_table[index] = {
-                'issue type': 'the field or fileds have not been recognised',
+                'issue type': 'the field or fields have not been recognised',
                 'content': key,
                 'comments': dictionary_candidate_unmatched_fields[key]
             }
@@ -317,6 +327,7 @@ class ReviewConstraints():
         return table_headers,issues_table,dictionary_candidate_unmatched_fields
 
 class Calculations():
+
     def gender_distribution(self,json_file):
         # json_file it is registered on the table
         candidates_dictionary = json_file['candidates_dictionary']
