@@ -75,16 +75,43 @@ input[type=submit] {
 
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div class="x_panel">
-              <form autocomplete="off" action="{% url 'project_reviewed_view' pk %}" method="post">
-            {% csrf_token %}
+
             <div class="x_title">
                 <h2>Project: {{ project_name }}<small>Review the issues found;  {{ message }}</small></h2>
                 <div style="overflow:auto;">
-                  <div style="float:right;">
+{#                    <div class="col-md-12 col-sm-12 col-xs-12">#}
+{#                    <div class="col-md-3 col-sm-3 col-xs-12">#}
+{#                        <div style="float:right;">#}
+{#                      <button type="submit" id="Btn" onclick="" name="Performs_Checks" value="Donwload File">Donwload File</button>#}
+{##}
+{#                    </div>#}
+{#                    </div>#}
+{#                    <div class="col-md- col-sm-3 col-xs-12">#}
+{#                        <div style="float:right;">#}
+{##}
+{#              <form autocomplete="off" action="{% url 'project_reviewed_view' pk %}" method="post">#}
+{#            {% csrf_token %}#}
+{#                    <button type="submit" id="Btn" onclick="" name="Performs_Checks" value="Performs_Checks">Submit Changes</button>#}
+{##}
+{#                  </div>#}
+{#                    </div>#}
+{#                        </div>#}
 
-                    <button type="submit" id="Btn" onclick="" name="Performs_Checks" value="Performs_Checks">Submit Changes</button>
+
+
+                    <div style="float:right;">
+
+              <form autocomplete="off" action="{% url 'project_reviewed_view' pk %}" method="post">
+            {% csrf_token %}
+                    <button type="submit" id="Btn" onclick="" name="Option" value="Submit Changes">Submit Changes</button>
 
                   </div>
+
+                    <div style="float:right;">
+                      <button type="submit" id="Btn" onclick="" name="Option" value="Save & Download">Save & Download</button>
+
+                    </div>
+
                 </div>
               <div class="clearfix"></div>
             </div>

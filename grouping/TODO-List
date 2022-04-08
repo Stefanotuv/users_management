@@ -1,0 +1,18 @@
+
+Add email confirmation to the registration of the user. and have the user not active until verified
+https://medium.com/@frfahim/django-registration-with-confirmation-email-bb5da011e4ef
+
+the link to set up google with the token
+Old:
+https://myaccount.google.com/lesssecureapps?pli=1&rapt=AEjHL4OjmKjpOwBJeNuMv6IBnPt6J8p7d_N6ODrSyB3GsR6zK6Akj2rNvTQKVXlwPkcI4AUDjvuQbX0coqIerzPKtaR29oFOsg
+https://accounts.google.com/b/0/DisplayUnlockCaptcha
+
+Nesw:
+...
+
+Add analytics:
+1) add distribution of age by gender
+2) add GMAT and AGE scatter plot
+
+modal how to can be found here. there is also a django generated view
+https://medium.com/@antoinewg/simple-modal-to-open-details-of-an-item-django-bootstrap-ffeeb11f12c1

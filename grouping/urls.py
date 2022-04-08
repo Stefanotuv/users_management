@@ -42,8 +42,15 @@ urlpatterns = [
          name='project_analytics_select_view'),
 
     path('view_project/',ProjectListView.as_view(template_name='grouping/view.html'),name='viewlist'),
+    path('view_project/download/<pk>',ProjectDownloadView.as_view(template_name='grouping/download.html'),name='viewdownload'),
 
     path('view_project_details/<pk>',ProjectDetailsView.as_view(template_name='grouping/view_details.html'),name='viewdetails'),
+
+    path('delete/<pk>',ProjectDeleteView.as_view(template_name='grouping/delete.html'),name='viewdelete'),
+
+    path('final/<pk>',ProjectFinalView.as_view(template_name='grouping/final.html'),name='project_final_view'),
+
+
 
     path("settings",
          ProjectSettingsView.as_view(template_name='grouping/settings.html'),

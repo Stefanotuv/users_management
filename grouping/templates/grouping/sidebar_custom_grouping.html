@@ -31,22 +31,33 @@
             <li><a href="{% url 'viewlist' %}">Existing Projects</a></li>
           </ul>
         </li>
-        <li><a><i class="fa fa-edit"></i> Messages <span class="fa fa-chevron-down"></span></a>
+
+
+
+        <li><a><i class="fa fa-bar-chart" aria-hidden="true"></i> Analytics <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
-            <li><a >Messages (coming soon)</a></li>
+            <li><a href="{% url 'project_analytics_select_view'  %}">Analytics</a></li>
           </ul>
         </li>
-        <li><a><i class="fa fa-desktop"></i> Settings <span class="fa fa-chevron-down"></span></a>
+
+          <li><a><i class="fa fa-desktop"></i> Settings <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="{% url 'project_settings_view' %}">Settings</a></li>
             <li><a href="{% url 'project_constraints_view' %}">Constraints</a></li>
+
                <li><a href="{% url 'project_constraints_upload_view' %}">Add Constraints (Bulk)</a></li>
           </ul>
 
         </li>
-        <li><a><i class="fa fa-bar-chart" aria-hidden="true"></i> Analytics <span class="fa fa-chevron-down"></span></a>
+
+          <li><a><i class="fa fa-envelope"></i> Messages <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
-            <li><a href="{% url 'project_analytics_select_view'  %}">Analytics</a></li>
+            <li><a >Messages (coming soon)</a></li>
+          </ul>
+        </li>
+          <li><a><i class="fa fa-user"></i> Profile <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url 'users_profile'  %}">View/ Edit Profile</a></li>
           </ul>
         </li>
       </ul>

@@ -37,6 +37,7 @@
                           <thead>
                             <tr class="headings" style="border-color: #405467;border-style: solid">
                                 <th class="column-title">id</th>
+                                <th class="column-title">owner</th>
                                 <th class="column-title">project name</th>
                                 <th class="column-title">status</th>
                                 <th class="column-title">input doc</th>
@@ -49,33 +50,36 @@
                             <tbody>
 
                                       {% for object in object_list %}
-                                         <tr class=" " >
+                                         <tr class=" " {% if object.status == 'final' %} style="background-color: #c1e77e" {% endif %}>
                                              <td class="column-title">{{ object.pk }}</td>
+                                             <td class="column-title">{{ object.owner.email }}</td>
                                              <td class="column-title">{{ object.project_name }}</td>
                                              <td class="column-title">{{ object.status }}</td>
-                                             <td class="column-title"><a href="{{ object.input_documents.file.url }}">{{ object.input_documents.file.name }}</a></td>
+{#                                             <td class="column-title"><a href="{{ object.input_documents.file.url }}">{{ object.input_documents.file.name|slice:":5" }}</a></td>#}
+                                             <td class="column-title"><a href="{{ object.input_documents.file.url }}"> [File] </a></td>
                                              <td class="column-title">{{ object.created }}</td>
                                              <td class="column-title">{{ object.last_modified }}</td>
                                              {% if object.status == 'created' %}
                                                  <td class="column-title">
                                                      <a href="{% url 'project_upload_from_file_view' object.pk %}"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></a>
                                                      <a><i class="fa fa-search" aria-hidden="true"></i></a>
-                                                     <a><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                     <a href="{% url 'viewdelete' object.pk %}"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                                  </td>
                                              {% elif object.status == 'started' %}
                                                  <td class="column-title"><a href="{% url 'project_review_view' object.pk %}"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></a>
                                                      <a href="{% url 'project_analytics_view' object.pk %}"><i class="fa fa-search" aria-hidden="true"></i></a>
-                                                     <a><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                     <a href="{% url 'viewdelete' object.pk %}"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                                  </td>
                                              {% elif object.status == 'reviewed' %}
                                                  <td class="column-title"><a href="{% url 'project_reviewed_view' object.pk %}"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></a>
                                                      <a href="{% url 'project_analytics_view' object.pk %}"><i class="fa fa-search" aria-hidden="true"></i></a>
-                                                     <a><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                     <a href="{% url 'viewdelete' object.pk %}"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                                  </td>
                                              {% elif object.status == 'final' %}
-                                                 <td class="column-title"><a><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></a>
+                                                 <td class="column-title">
+                                                     <a href="{% url 'project_final_view' object.pk %}"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></a>
                                                      <a href="{% url 'project_analytics_view' object.pk %}"><i class="fa fa-search" aria-hidden="true"></i></a>
-                                                     <a><i class="fa fa-trash" aria-hidden="true"></i></a> </td>
+                                                     <a href="{% url 'viewdelete' object.pk %}"><i class="fa fa-trash" aria-hidden="true"></i></a> </td>
                                              {% endif %}
                                         </tr>
                                       {% endfor %}

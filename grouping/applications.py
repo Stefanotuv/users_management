@@ -430,7 +430,8 @@ class Calculations():
         gmat_min = 800
         for candidate in candidates_dictionary.values():
             score = candidate['GMAT Score(total)']
-            if score != None:
+            score.split
+            if (score != None) and (score !='None'):
                 if int(score) >= gmat_max:
                     gmat_max = int(score)
                 if int(score) <= gmat_min:
@@ -448,7 +449,7 @@ class Calculations():
 
         for candidate in candidates_dictionary.values():
             score = candidate['GMAT Score(total)']
-            if score != None:
+            if score != None and score != 'None':
                 if int(score) <= 500:
                     if candidate['Gender'] == 'Male':
                         gmat_range[500]['male'] = gmat_range[500]['male'] + 1
@@ -481,9 +482,101 @@ class Calculations():
 
         return [gmat_range_list,gmat_range_list_male,gmat_range_list_female,gmat_range_list_others,gmat_range_list_total]
 
+    def age_distribution(self,json_file):
+        candidates_dictionary = json_file['candidates_dictionary']
+
+        # find max and min of the GMAT range
+        #
+        age_max = 0
+        age_min = 80
+        age_range_index = []
+        age_range = {}
+        for candidate in candidates_dictionary.values():
+
+            if candidate['Age'] != None and candidate['Age'] != 'None':
+                age = candidate['Age'].split('.')[0]
+                if int(age) >= age_max:
+                    age_max = int(age)
+                if int(age) <= age_min:
+                    age_min = int(age)
+                if age not in age_range_index:
+                    age_range_index.append(age)
+        age_range_index.sort()
+        for index in age_range_index:
+            age_range[int(index)] = {'male': 0, 'female': 0, 'others': 0, 'total': 0, }
+        # review how to create a distribution from the Max and Min
+
+        # value = age_min
+
+        # while value <= age_max:
+        #     age_range[value] = {'male': 0,'female': 0,'others': 0,'total': 0,}
+        #     value = value + 10
+
+        for value,candidate in candidates_dictionary.items():
+
+            if candidate['Age'] != None and candidate['Age'] != 'None':
+                age = candidate['Age'].split('.')[0]
+                if age not in age_range.keys():
+                    # this condition is for an old implmentation
+                    age_range[int(age)] = {'male': 0, 'female': 0, 'others': 0, 'total': 0, }
+                if candidate['Gender'] == 'Male':
+                    age_range[int(age)]['male'] = age_range[int(age)]['male'] + 1
+                elif candidate['Gender'] == 'Female':
+                    age_range[int(age)]['female'] = age_range[int(age)]['female'] + 1
+                else:
+                    age_range[int(age)]['others'] = age_range[int(age)]['others'] + 1
+                age_range[int(age)]['total'] = age_range[int(age)]['total'] + 1
+
+
+            age_range_list = []
+            age_range_list_male = []
+            age_range_list_female = []
+            age_range_list_others = []
+            age_range_list_total = []
+
+            for key, item in age_range.items():
+                # the items in the range are not ordered
+                age_range_list.append(key)
+                age_range_list_male.append(item['male'])
+                age_range_list_female.append(item['female'])
+                age_range_list_others.append(item['others'])
+                age_range_list_total.append(item['total'])
+
+        return [age_range_list,age_range_list_male,age_range_list_female,age_range_list_others,age_range_list_total]
+
+    def gmat_age_gender_distribution(self,json_file):
+        candidates_dictionary = json_file['candidates_dictionary']
+
+        # find max and min of the GMAT range
+        #
+        gmat_age_gender_list = []
+        gmat_age_gender_list_male = []
+        gmat_age_gender_list_female = []
+        gmat_age_gender_list_others = []
+        gmat_age_gender_list_total = []
+
+        for candidate in candidates_dictionary.values():
+
+            if candidate['Age'] != None and candidate['GMAT Score(total)'] != 'None':
+                age = int(candidate['Age'].split('.')[0])
+                gmat = int(candidate['GMAT Score(total)'].split('.')[0])
+
+                if candidate['Gender'] == 'Male':
+                    gmat_age_gender_list_male.append([age,gmat])
+                elif candidate['Gender'] == 'Female':
+                    gmat_age_gender_list_female.append([age,gmat])
+                else:
+                    gmat_age_gender_list_others.append([age,gmat])
+
+                gmat_age_gender_list_total.append([age,gmat])
+
+        return [gmat_age_gender_list,gmat_age_gender_list_male,gmat_age_gender_list_female,gmat_age_gender_list_others,gmat_age_gender_list_total]
+
     def top_professional_category(self):
         return 1
-    def job_function_category(self):
+    def top_job_function_category(self):
         return 1
-    def job_title_category(self):
+    def top_job_title_category(self):
+        return 1
+    def top_company_category(self):
         return 1

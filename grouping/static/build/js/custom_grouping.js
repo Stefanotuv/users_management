@@ -5573,6 +5573,301 @@ function init_echarts_grouping(candidate_by_country_world_map,max_value,countrie
         });
 
     }
+
+    if ($('#age_distribution_gender').length) {
+
+        var echartBar = echarts.init(document.getElementById('age_distribution_gender'), theme);
+
+        echartBar.setOption({
+            title: {
+                // text: 'Graph title',
+                // subtext: 'Graph Sub-text'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['Male', 'Female','Others','Total']
+            },
+            toolbox: {
+                show: false
+            },
+            calculable: false,
+            xAxis: [{
+                type: 'category',
+                data: age_range_list,
+            }],
+            yAxis: [{
+                type: 'value'
+            }],
+            series: [{
+                name: 'Male',
+                type: 'bar',
+                data:
+                    age_range_list_male,
+                // markPoint: {
+                //     data: [{
+                //         type: 'average',
+                //         name: 'avg'
+                //     },
+                //     //     {
+                //     //     type: 'min',
+                //     //     name: 'min'
+                //     // }
+                //     ]
+                // },
+                // markLine: {
+                //     data: [{
+                //         type: 'average',
+                //         name: 'avg'
+                //     }]
+                // }
+            }, {
+                name: 'Female',
+                type: 'bar',
+                data:
+                    age_range_list_female,
+                // markPoint: {
+                //     data: [{
+                //         type: 'average',
+                //         name: 'avg'
+                //     },
+                //     //     {
+                //     //     type: 'min',
+                //     //     name: 'min'
+                //     // }
+                //     ]
+                // },
+                // markLine: {
+                //     data: [{
+                //         type: 'average',
+                //         name: 'avg'
+                //     }]
+                // }
+            },
+            {
+                name: 'Others',
+                type: 'bar',
+                data:
+                    age_range_list_others,
+                // markPoint: {
+                //     data: [{
+                //         type: 'average',
+                //         name: 'avg'
+                //     },
+                //     //     {
+                //     //     type: 'min',
+                //     //     name: 'min'
+                //     // }
+                //     ]
+                // },
+                // markLine: {
+                //     data: [{
+                //         type: 'average',
+                //         name: 'avg'
+                //     }]
+                // }
+            },
+            {
+                name: 'Total',
+                type: 'bar',
+                data:
+                    age_range_list_total,
+                markPoint: {
+                    data: [{
+                        type: 'sum',
+                        name: 'avg'
+                    },
+                    //     {
+                    //     type: 'min',
+                    //     name: 'min'
+                    // }
+                    ]
+                },
+                // markLine: {
+                //     data: [{
+                //         type: 'average',
+                //         // name: 'avg'
+                //     }]
+                // }
+            },
+            ]
+        });
+
+    }
+
+    if ($('#echart_scatter_grouping').length) {
+
+        var echartScatter = echarts.init(document.getElementById('echart_scatter_grouping'), theme);
+
+        echartScatter.setOption({
+            title: {
+                // text: 'Scatter Graph',
+                // subtext: 'Heinz  2003'
+            },
+            tooltip: {
+                trigger: 'axis',
+                showDelay: 0,
+                axisPointer: {
+                    type: 'cross',
+                    lineStyle: {
+                        type: 'dashed',
+                        width: 1
+                    }
+                }
+            },
+            legend: {
+
+                data: ['Male', 'Female','Others','Total']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    saveAsImage: {
+                        show: true,
+                        title: "Save Image"
+                    }
+                }
+            },
+            xAxis: [{
+                type: 'value',
+                scale: true,
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            }],
+            yAxis: [{
+                type: 'value',
+                scale: true,
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            }],
+            series: [{
+                name: 'Male',
+                type: 'scatter',
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        if (params.value.length > 1) {
+                            return params.seriesName + ' :<br/>' + params.value[0] + ' ' + params.value[1] + ' ';
+                        } else {
+                            return params.seriesName + ' :<br/>' + params.name + ' : ' + params.value + ' ';
+                        }
+                    }
+                },
+                data:
+                    gmat_age_gender_list_male,
+                markPoint: {
+                    data: [{
+                        type: 'max',
+                        name: 'Max'
+                    }, {
+                        type: 'min',
+                        name: 'Min'
+                    }]
+                },
+                markLine: {
+                    data: [{
+                        type: 'average',
+                        name: 'Mean'
+                    }]
+                }
+            }, {
+                name: 'Female',
+                type: 'scatter',
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        if (params.value.length > 1) {
+                            return params.seriesName + ' :<br/>' + params.value[0] + ' ' + params.value[1] + ' ';
+                        } else {
+                            return params.seriesName + ' :<br/>' + params.name + ' : ' + params.value + ' ';
+                        }
+                    }
+                },
+                data:
+                    gmat_age_gender_list_female,
+                markPoint: {
+                    data: [{
+                        type: 'max',
+                        name: 'Max'
+                    }, {
+                        type: 'min',
+                        name: 'Min'
+                    }]
+                },
+                markLine: {
+                    data: [{
+                        type: 'average',
+                        name: 'Mean'
+                    }]
+                }
+            }, {
+                name: 'Others',
+                type: 'scatter',
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        if (params.value.length > 1) {
+                            return params.seriesName + ' :<br/>' + params.value[0] + ' ' + params.value[1] + ' ';
+                        } else {
+                            return params.seriesName + ' :<br/>' + params.name + ' : ' + params.value + ' ';
+                        }
+                    }
+                },
+                data:
+                    gmat_age_gender_list_others,
+                markPoint: {
+                    data: [{
+                        type: 'max',
+                        name: 'Max'
+                    }, {
+                        type: 'min',
+                        name: 'Min'
+                    }]
+                },
+                markLine: {
+                    data: [{
+                        type: 'average',
+                        name: 'Mean'
+                    }]
+                }
+            }, {
+                name: 'Total',
+                type: 'scatter',
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        if (params.value.length > 1) {
+                            return params.seriesName + ' :<br/>' + params.value[0] + ' Age ' + params.value[1] + ' Gmat ';
+                        } else {
+                            return params.seriesName + ' :<br/>' + params.name + ' : ' + params.value + ' Gmat ';
+                        }
+                    }
+                },
+                data:
+                    gmat_age_gender_list_total,
+
+                markPoint: {
+                    data: [{
+                        type: 'max',
+                        name: 'Max'
+                    }, {
+                        type: 'min',
+                        name: 'Min'
+                    }]
+                },
+                markLine: {
+                    data: [{
+                        type: 'average',
+                        name: 'Mean'
+                    }]
+                }
+            }]
+        });
+
+    }
 }
 
 function init_charts_grouping(label_by_gender,value_by_gender) {

@@ -18,12 +18,12 @@ class CustomUserChangeForm(UserChangeForm):
 
 
 class UserRegisterForm(UserCreationForm):
-    # email = forms.EmailField()
+    email = forms.EmailField()
 
     class Meta:
         model = User
-        fields = ['name','email', 'password1', 'password2']
-
+        # fields = ['name','email', 'password1', 'password2'] # old version
+        fields = ['email', 'password1', 'password2']
 
 class UserUpdateForm(forms.ModelForm):
     # email = forms.EmailField()

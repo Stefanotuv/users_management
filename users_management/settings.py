@@ -89,8 +89,13 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates',
-                 os.path.join(BASE_DIR, 'users/templates'),
-                 os.path.join(BASE_DIR, 'users'),
+                 # replace the previous user template to force the use the login template on grouping
+                 os.path.join(BASE_DIR, 'grouping/users/templates'),
+
+                 # old
+                 # os.path.join(BASE_DIR, 'users/templates'),
+                 # os.path.join(BASE_DIR, 'users'),
+
                  # the order is important if there is an overalaps of names
                  os.path.join(BASE_DIR, 'grouping/templates'),
                  os.path.join(BASE_DIR, 'grouping'),
@@ -201,7 +206,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 
 # added to send to profile after login-in. this should be updated if the page has to be the home page post login
-LOGIN_REDIRECT_URL = 'users_profile'
+LOGIN_REDIRECT_URL = 'home' # OLD VERSION the login pages have been moved
 LOGIN_URL = 'users_login'
 
 # added
@@ -216,4 +221,12 @@ CORS_ALLOW_CREDENTIALS = True
 # no limit to the number of parameters on get and post
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
+# email
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'groupingproject.adm@gmail.com'
+EMAIL_HOST_PASSWORD = 'wlihhwzzlmcgyneb'
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = 'Grouping Project Admin'

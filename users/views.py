@@ -1,9 +1,18 @@
+from django.http import HttpResponse
 from django.shortcuts import render
-
+from django.core.mail import EmailMessage
 # Create your views here.
 from django.shortcuts import render, redirect
+from .models import *
+from django.contrib.auth import authenticate, login
+
 # from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+
+from grouping.tokens import account_activation_token
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, UserLoginForm, UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from allauth.account.views import LoginView, LogoutView, SignupView
@@ -18,6 +27,9 @@ from django.views.generic import UpdateView, CreateView
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+
 from allauth.account.utils import (
     complete_signup,
     get_login_redirect_url,
@@ -27,46 +39,86 @@ from allauth.account.utils import (
     perform_login,
     sync_user_email_addresses,
     url_str_to_user_pk,
-
 )
-
+def activate(request, uidb64, token):
+    try:
+        # https://stackoverflow.com/questions/70382084/import-error-force-text-from-django-utils-encoding
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        # return redirect('home')
+        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+    else:
+        return HttpResponse('Activation link is invalid!')
 
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+
+            mail_subject = 'Activate your blog account.'
+            message = render_to_string('users/acc_active_email.html', {
+                'user': user.email,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                # 'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token': account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+
+            username = form.cleaned_data.get('email')
             messages.success(request,f'Account created for {username}!')
-            return redirect('users_login')
+
+            # return HttpResponse('Please confirm your email address to complete the registration')
+            return redirect('users_signup_email_ok')
+
+            # return redirect('users_login')
     else:
         form = UserRegisterForm()
-    return render(request, 'users/signup.html', {'form': form})
+    # return render(request, 'users/login.html', {'form': form})
+    email = request.POST['email']
+    messages.error(request, f'{email} already existing, try another email!')
 
-@login_required
-def profile(request):
-    if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST,instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=request.user.profile)
+    return redirect('users_signup_email_ko')
 
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request,f'Account update successfully!')
-            return redirect('users_profile')
-
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
-
-    context = {
-        'u_form':u_form,
-        'p_form':p_form
-    }
-
-    return render(request, 'users/profile.html',context)
+# old implementation with function
+# @login_required
+# def profile(request):
+#     if request.method == 'POST':
+#         u_form = UserUpdateForm(request.POST,instance=request.user)
+#         p_form = ProfileUpdateForm(request.POST,
+#                                    request.FILES,
+#                                    instance=request.user.profile)
+#
+#         if u_form.is_valid() and p_form.is_valid():
+#             u_form.save()
+#             p_form.save()
+#             messages.success(request,f'Account update successfully!')
+#             return redirect('users_profile')
+#
+#     else:
+#         u_form = UserUpdateForm(instance=request.user)
+#         p_form = ProfileUpdateForm(instance=request.user.profile)
+#
+#     context = {
+#         'u_form':u_form,
+#         'p_form':p_form
+#     }
+#
+#     return render(request, 'users/profile.html',context)
 
 class UserLoginView(LoginView):
         form_class = UserLoginForm
@@ -91,6 +143,7 @@ class UserLoginView(LoginView):
                         "redirect_field_value": redirect_field_value})
             return ret
 
+@method_decorator(login_required, name='dispatch')
 class UserLogoutView(LogoutView):
         template_name = "users/logout.html"
 
@@ -113,7 +166,6 @@ class UserLogoutView(LogoutView):
             response = redirect(url)
             return _ajax_response(self.request, response)
 
-
         def get_redirect_url(self):
             return (
                     get_next_redirect_url(
@@ -122,48 +174,52 @@ class UserLogoutView(LogoutView):
                 self.request).get_logout_redirect_url(
                 self.request))
 
+class UserSignupOkView(SignupView):
+    form_class = UserRegisterForm
+    template_name = "users/emailconfirmationsent.html"
+    # success_url = reverse_lazy('users_login')
 
 # adding profile and register classes this would enable the
 # change in template when called from other apps in the project
 
-class UserSignupView(SignupView):
-    form_class = UserRegisterForm
-    template_name = "users/signup.html"
-    # success_url = 'users/login.html'
-
-    def get(self, *args, **kwargs):
-        output = super().get(*args, **kwargs)
-        return output
-
-    def get_context_data(self, **kwargs):
-        ret = super(SignupView, self).get_context_data(**kwargs)
-        form = ret['form']
-        email = self.request.session.get('account_verified_email')
-        if email:
-            email_keys = ['email']
-            if app_settings.SIGNUP_EMAIL_ENTER_TWICE:
-                email_keys.append('email2')
-            for email_key in email_keys:
-                form.fields[email_key].initial = email
-        login_url = passthrough_next_redirect_url(self.request,
-                                                  reverse("users_login"),
-                                                  self.redirect_field_name)
-        redirect_field_name = self.redirect_field_name
-        redirect_field_value = get_request_param(self.request,
-                                                 redirect_field_name)
-        ret.update({"login_url": login_url,
-                    "redirect_field_name": redirect_field_name,
-                    "redirect_field_value": redirect_field_value})
-        return ret
-
-
-    def post(self, request, *args, **kwargs):
-        output = super().post(request,*args, **kwargs)
-        return output
-
-
+# class UserSignupView(SignupView):
+#     form_class = UserRegisterForm
+#     template_name = "users/signup.html"
+#     # success_url = 'users/login.html'
+#
+#     def get(self, *args, **kwargs):
+#         output = super().get(*args, **kwargs)
+#         return output
+#
+#     def get_context_data(self, **kwargs):
+#         ret = super(SignupView, self).get_context_data(**kwargs)
+#         form = ret['form']
+#         email = self.request.session.get('account_verified_email')
+#         if email:
+#             email_keys = ['email']
+#             if app_settings.SIGNUP_EMAIL_ENTER_TWICE:
+#                 email_keys.append('email2')
+#             for email_key in email_keys:
+#                 form.fields[email_key].initial = email
+#         login_url = passthrough_next_redirect_url(self.request,
+#                                                   reverse("users_login"),
+#                                                   self.redirect_field_name)
+#         redirect_field_name = self.redirect_field_name
+#         redirect_field_value = get_request_param(self.request,
+#                                                  redirect_field_name)
+#         ret.update({"login_url": login_url,
+#                     "redirect_field_name": redirect_field_name,
+#                     "redirect_field_value": redirect_field_value})
+#         return ret
+#
+#
+#     def post(self, request, *args, **kwargs):
+#         output = super().post(request,*args, **kwargs)
+#         return output
+@method_decorator(login_required, name='dispatch')
 class UserProfileView(UpdateView):
     template_name = 'users/profile.html'
+    # form_class = ProfileUpdateForm
 
     def get(self, request, *args, **kwargs):
         u_form = UserUpdateForm(instance=request.user)
@@ -189,7 +245,36 @@ class UserProfileView(UpdateView):
 
         return redirect('users_profile')
 
+@method_decorator(login_required, name='dispatch')
+class UserProfileChangePictureView(UpdateView):
+    template_name = 'users/profile_change_picture.html'
+    # form_class = ProfileUpdateForm
 
+    def get(self, request, *args, **kwargs):
+        # u_form = UserUpdateForm(instance=request.user)
+        # p_form = ProfileUpdateForm(instance=request.user.profile)
+        #
+        # context = {
+        #     'u_form': u_form,
+        #     'p_form': p_form
+        # }
+        context = {}
+        return render(request, 'users/profile_change_picture.html', context)
+
+    def post(self, request, *args, **kwargs):
+        # u_form = UserUpdateForm(request.POST, instance=request.user)
+        # p_form = ProfileUpdateForm(request.POST,
+        #                            request.FILES,
+        #                            instance=request.user.profile)
+        #
+        # if u_form.is_valid() and p_form.is_valid():
+        #     u_form.save()
+        #     p_form.save()
+        #     messages.success(request, f'Account update successfully!')
+
+        return redirect('users_profile')
+
+@method_decorator(login_required, name='dispatch')
 class UserChangePasswordView(PasswordChangeView):
     from_class = PasswordChangeForm
     success_url = reverse_lazy('users_login')

@@ -382,7 +382,67 @@ th {
             </div>
 
         </div>
+        {% if user.is_superuser %}
+        <div class="col-md-3 col-sm-3 col-xs-3">
+          <div class="x_panel">
 
+            <div class="x_title">
+              <h2>Mandatory Table Fields<small></small></h2>
+                <div style="overflow:auto;">
+                  <div style="float:right;">
+
+
+                  </div>
+                </div>
+              <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                       <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action">
+                          <thead>
+                            <tr class="headings" style="border-color: #405467;border-style: solid">
+                                <th class="column-title">Table Field</th>
+
+                            </tr>
+
+                          </thead>
+                            <tbody>
+
+                                      {% for tf in table_fields %}
+                                         <tr class=" " >
+                                         <td class="column-title">{{ tf.value }}</td>
+                                        </tr>
+                                      {% endfor %}
+                            <form action="{% url 'project_constraints_view' %}" method="post">
+                                                    {% csrf_token %}
+                                    <tr class=" " >
+                                        <td>
+                                           <div class="autocomplete" style="width:-webkit-fill-available;" >
+                                            <input class="autocomplete" id="myJobFunction" name="TableFieldsMandatory" style="width:-webkit-fill-available;" value="">
+                                               <input type="hidden" name="submit" style="width:-webkit-fill-available;" value="TableFieldsMandatory">
+                                           </div>
+                                        </td>
+                                    </tr>
+                                    <tr class=" " >
+                                        <td>
+                                           <div class="autocomplete" style="width:-webkit-fill-available;" >
+                                            <button type="submit" id="submit_jf" name="JF" style="width:-webkit-fill-available;" value="">Add to the List
+                                           </div>
+                                        </td>
+                                    </tr>
+                            </form>
+                            </tbody>
+                        </table>
+                      </div>
+
+              </div>
+
+            </div>
+
+        </div>
+        {% endif %}
     </div>
   </div>
 
