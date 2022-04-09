@@ -1,4 +1,6 @@
-from django.http import HttpResponse
+import urllib
+
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.core.mail import EmailMessage
 # Create your views here.
@@ -29,6 +31,9 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.core.files import File
+import os
+from pathlib import Path
 
 from allauth.account.utils import (
     complete_signup,
@@ -40,6 +45,9 @@ from allauth.account.utils import (
     sync_user_email_addresses,
     url_str_to_user_pk,
 )
+
+import glob
+
 def activate(request, uidb64, token):
     try:
         # https://stackoverflow.com/questions/70382084/import-error-force-text-from-django-utils-encoding
@@ -242,13 +250,24 @@ class UserProfileView(UpdateView):
             u_form.save()
             p_form.save()
             messages.success(request, f'Account update successfully!')
+        return HttpResponseRedirect(reverse('users_profile', kwargs={'pk': kwargs['pk']}))
 
-        return redirect('users_profile')
 
 @method_decorator(login_required, name='dispatch')
 class UserProfileChangePictureView(UpdateView):
     template_name = 'users/profile_change_picture.html'
     # form_class = ProfileUpdateForm
+    context_object_name = 'profilechangeview'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+
+
+        mylist = [f for f in glob.glob("*.txt")]
+
+
+        return context
 
     def get(self, request, *args, **kwargs):
         # u_form = UserUpdateForm(instance=request.user)
@@ -258,7 +277,11 @@ class UserProfileChangePictureView(UpdateView):
         #     'u_form': u_form,
         #     'p_form': p_form
         # }
-        context = {}
+        # os.getcwd() # get the current work directory
+
+        mylist = ['/'+f for f in glob.glob("users/media/profile_pics/gallery/*.*")]
+        # context = self.get_context_data(**kwargs)
+        context = {'mylist': mylist}
         return render(request, 'users/profile_change_picture.html', context)
 
     def post(self, request, *args, **kwargs):
@@ -272,7 +295,43 @@ class UserProfileChangePictureView(UpdateView):
         #     p_form.save()
         #     messages.success(request, f'Account update successfully!')
 
-        return redirect('users_profile')
+        user = User.objects.get(pk=kwargs['pk'])
+        pre_path = os.getcwd()
+        path_suf = request.POST['selected'].split('/users')[1]
+        new_path = Path(pre_path + '/users' + path_suf)
+        image_url = new_path
+        initial_path = user.profile.image.name
+
+        # https: // stackoverflow.com / questions / 1308386 / programmatically - saving - image - to - django - imagefield
+        # result = urllib.urlretrieve(image_url)
+
+        user.profile.image.save(
+            os.path.basename(new_path),
+            File(open(image_url, 'rb'))
+        )
+
+        user.profile.save()
+
+
+
+        # with new_path.open(mode='r') as f:
+        #     ...
+        #     new_image = File(f, name=new_path.name)
+        # user.profile.image = new_image
+        # user.profile.image = Image.open(new_path)
+        # https: // docs.djangoproject.com / en / 4.0 / topics / files /
+        # https: // stackoverflow.com / questions / 67702770 / unidentifiedimageerror - at - login - cannot - identify - image - file - c - users - sudha
+        # user.save()
+        # user.profile.save()
+        # os.rename(initial_path, new_path)new_path
+        # user.profile.image  = models.ImageField(default=full_path)
+
+
+
+
+        # return redirect('users_profile')
+
+        return HttpResponseRedirect(reverse('users_profile', kwargs={'pk': kwargs['pk']}))
 
 @method_decorator(login_required, name='dispatch')
 class UserChangePasswordView(PasswordChangeView):

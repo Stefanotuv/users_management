@@ -57,7 +57,7 @@
         </li>
           <li><a><i class="fa fa-user"></i> Profile <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
-            <li><a href="{% url 'users_profile'  %}">View/ Edit Profile</a></li>
+            <li><a href="{% url 'users_profile' user.pk %}">View/ Edit Profile</a></li>
           </ul>
         </li>
       </ul>
