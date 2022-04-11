@@ -430,7 +430,6 @@ class Calculations():
         gmat_min = 800
         for candidate in candidates_dictionary.values():
             score = candidate['GMAT Score(total)']
-            score.split
             if (score != None) and (score !='None'):
                 if int(score) >= gmat_max:
                     gmat_max = int(score)
@@ -578,5 +577,36 @@ class Calculations():
         return 1
     def top_job_title_category(self):
         return 1
-    def top_company_category(self):
-        return 1
+    def top_company_category(self,json_file):
+        candidates_dictionary = json_file['candidates_dictionary']
+        total_number_of_companies = 0
+        list_of_companies = []
+        dictionary_companies = {}
+        list_of_companies_dic = {}
+        for candidate in candidates_dictionary.values():
+            if (candidate['Company Name'] != None and candidate['Company Name'] != "None"):
+                if(candidate['Company Name'] in dictionary_companies.keys()):
+                    dictionary_companies[candidate['Company Name']]['total'] = dictionary_companies[candidate['Company Name']]['total'] + 1
+                    list_of_companies.append(candidate['Company Name'])
+                    list_of_companies_dic[candidate['Company Name']] = dictionary_companies[candidate['Company Name']]['total']
+                    # dictionary_companies = {
+                    #     'company1':{'total':total,'percent': percent},
+                    #      'company2': {'total': total, 'percent': percent}
+                    #     }
+                else:
+                    dictionary_companies[candidate['Company Name']] = {'total':1,'percent':0}
+                    list_of_companies_dic[candidate['Company Name']] = 1
+                    total_number_of_companies = total_number_of_companies + 1
+
+        # the value in the dictionary should be the % of the total for each company other than the value
+        for cand in dictionary_companies.values():
+            cand['percent'] = int(cand['total']/total_number_of_companies * 100)
+
+        list_of_companies_dic_sorted = dict(sorted(list_of_companies_dic.items(), reverse=True, key=lambda item: item[1]))
+
+        ordered_dictionary_companies = {}
+
+        for company in list_of_companies_dic_sorted.keys():
+            ordered_dictionary_companies[company] = dictionary_companies[company]
+
+        return [total_number_of_companies, list_of_companies, ordered_dictionary_companies]

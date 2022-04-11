@@ -1,5 +1,6 @@
 import urllib
 
+import requests
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.core.mail import EmailMessage
@@ -135,7 +136,6 @@ class UserLoginView(LoginView):
         def get(self, request, *args, **kwargs):
             return super().get(request, *args, **kwargs)
 
-
         def get_context_data(self, **kwargs):
             ret = super(LoginView, self).get_context_data(**kwargs)
             signup_url = passthrough_next_redirect_url(self.request,
@@ -262,11 +262,6 @@ class UserProfileChangePictureView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-
-
-        mylist = [f for f in glob.glob("*.txt")]
-
-
         return context
 
     def get(self, request, *args, **kwargs):
@@ -285,51 +280,54 @@ class UserProfileChangePictureView(UpdateView):
         return render(request, 'users/profile_change_picture.html', context)
 
     def post(self, request, *args, **kwargs):
-        # u_form = UserUpdateForm(request.POST, instance=request.user)
-        # p_form = ProfileUpdateForm(request.POST,
-        #                            request.FILES,
-        #                            instance=request.user.profile)
-        #
-        # if u_form.is_valid() and p_form.is_valid():
-        #     u_form.save()
-        #     p_form.save()
-        #     messages.success(request, f'Account update successfully!')
-
         user = User.objects.get(pk=kwargs['pk'])
-        pre_path = os.getcwd()
-        path_suf = request.POST['selected'].split('/users')[1]
-        new_path = Path(pre_path + '/users' + path_suf)
-        image_url = new_path
-        initial_path = user.profile.image.name
+        if len(request.FILES)!=0:
+        # u_form = UserUpdateForm(request.POST, instance=request.user)
+            user.profile.image = request.FILES['file']
+            user.profile.save()
+            # p_form = ProfileUpdateForm(request.POST,
+            #                            request.FILES,
+            #                            instance=request.user.profile)
+            #
+            # if p_form.is_valid():
+            #     p_form.save()
+            #     messages.success(request, f'Account update successfully!')
+        else:
 
-        # https: // stackoverflow.com / questions / 1308386 / programmatically - saving - image - to - django - imagefield
-        # result = urllib.urlretrieve(image_url)
+            pre_path = os.getcwd()
+            path_suf = request.POST['selected'].split('/users')[1]
+            new_path = Path(pre_path + '/users' + path_suf)
+            image_url = new_path
+            initial_path = user.profile.image.name
 
-        user.profile.image.save(
-            os.path.basename(new_path),
-            File(open(image_url, 'rb'))
-        )
+            # https: // stackoverflow.com / questions / 1308386 / programmatically - saving - image - to - django - imagefield
+            # result = urllib.urlretrieve(image_url)
 
-        user.profile.save()
+            user.profile.image.save(
+                os.path.basename(new_path),
+                File(open(image_url, 'rb'))
+            )
 
-
-
-        # with new_path.open(mode='r') as f:
-        #     ...
-        #     new_image = File(f, name=new_path.name)
-        # user.profile.image = new_image
-        # user.profile.image = Image.open(new_path)
-        # https: // docs.djangoproject.com / en / 4.0 / topics / files /
-        # https: // stackoverflow.com / questions / 67702770 / unidentifiedimageerror - at - login - cannot - identify - image - file - c - users - sudha
-        # user.save()
-        # user.profile.save()
-        # os.rename(initial_path, new_path)new_path
-        # user.profile.image  = models.ImageField(default=full_path)
-
+            user.profile.save()
 
 
 
-        # return redirect('users_profile')
+            # with new_path.open(mode='r') as f:
+            #     ...
+            #     new_image = File(f, name=new_path.name)
+            # user.profile.image = new_image
+            # user.profile.image = Image.open(new_path)
+            # https: // docs.djangoproject.com / en / 4.0 / topics / files /
+            # https: // stackoverflow.com / questions / 67702770 / unidentifiedimageerror - at - login - cannot - identify - image - file - c - users - sudha
+            # user.save()
+            # user.profile.save()
+            # os.rename(initial_path, new_path)new_path
+            # user.profile.image  = models.ImageField(default=full_path)
+
+
+
+
+            # return redirect('users_profile')
 
         return HttpResponseRedirect(reverse('users_profile', kwargs={'pk': kwargs['pk']}))
 
@@ -337,3 +335,23 @@ class UserProfileChangePictureView(UpdateView):
 class UserChangePasswordView(PasswordChangeView):
     from_class = PasswordChangeForm
     success_url = reverse_lazy('users_login')
+
+    def get(self, request, *args, **kwargs):
+        request.session['get_post'] = 'get'
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.session['get_post'] == 'post':
+            if context['form'].is_valid():
+                context['password_change'] = 'success'
+            else:
+                context['password_change'] = 'try again, there were some errors'
+
+        elif self.request.session['get_post'] == 'get':
+            context['password_change'] = ''
+        return context
+    def post(self, request, *args, **kwargs):
+        request.session['get_post'] = 'post'
+        return super().post(request, *args, **kwargs)

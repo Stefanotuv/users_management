@@ -84,6 +84,34 @@ input[type=submit] {
 
 
     </style>
+<style> /* Tooltip container */
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+</style>
     {% endblock head %}
   <script>
       gmat_range_list =
@@ -478,6 +506,162 @@ input[type=submit] {
           </div>
         </div>
     </div>
+      <div class="row">
+            <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="x_panel fixed_height_320">
+          <div class="x_title">
+            <h2>Top Employers <small></small></h2>
+
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Settings 1</a>
+                  </li>
+                  <li><a href="#">Settings 2</a>
+                  </li>
+                </ul>
+              </li>
+              <li><a class="close-link"><i class="fa fa-close"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            Total Number of companies: {{ total_number_of_companies }}
+              <br>
+              <br>
+        <div style="overflow: scroll;height: 200px;">
+            {% for key, value in dictionary_companies.items %}
+              <div class="widget_summary">
+              <div class="w_left w_25">
+                <span title="{{ key }}" style="display:inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; max-width: 11ch;">{{ key }}</span>
+{#                <span class="tooltiptext">{{ key }}</span>#}
+              </div>
+
+              <div class="w_center w_55">
+                <div class="progress">
+                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="{{ value.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ value.percent }}%;">
+                    <span class="sr-only">{{ value.percent }}% Complete</span>
+                  </div>
+                </div>
+              </div>
+              <div class="w_right w_20">
+                <span>{{ value.total }}</span>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            {% endfor %}
+        </div>
+          </div>
+        </div>
+      </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="x_panel fixed_height_320">
+          <div class="x_title">
+            <h2>Top Job Functions <small></small></h2>
+
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Settings 1</a>
+                  </li>
+                  <li><a href="#">Settings 2</a>
+                  </li>
+                </ul>
+              </li>
+              <li><a class="close-link"><i class="fa fa-close"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            Total Number of companies: {{ total_number_of_companies }}
+              <br>
+              <br>
+        <div style="overflow: scroll;height: 200px;">
+            {% for key, value in dictionary_companies.items %}
+              <div class="widget_summary">
+              <div class="w_left w_25">
+                <span title="{{ key }}" style="display:inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; max-width: 11ch;">{{ key }}</span>
+{#                <span class="tooltiptext">{{ key }}</span>#}
+              </div>
+
+              <div class="w_center w_55">
+                <div class="progress">
+                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="{{ value.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ value.percent }}%;">
+                    <span class="sr-only">{{ value.percent }}% Complete</span>
+                  </div>
+                </div>
+              </div>
+              <div class="w_right w_20">
+                <span>{{ value.total }}</span>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            {% endfor %}
+        </div>
+          </div>
+        </div>
+      </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="x_panel fixed_height_320">
+          <div class="x_title">
+            <h2>Top Job Titles <small></small></h2>
+
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Settings 1</a>
+                  </li>
+                  <li><a href="#">Settings 2</a>
+                  </li>
+                </ul>
+              </li>
+              <li><a class="close-link"><i class="fa fa-close"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            Total Number of companies: {{ total_number_of_companies }}
+              <br>
+              <br>
+        <div style="overflow: scroll;height: 200px;">
+            {% for key, value in dictionary_companies.items %}
+              <div class="widget_summary">
+              <div class="w_left w_25">
+                <span title="{{ key }}" style="display:inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; max-width: 11ch;">{{ key }}</span>
+{#                <span class="tooltiptext">{{ key }}</span>#}
+              </div>
+
+              <div class="w_center w_55">
+                <div class="progress">
+                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="{{ value.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ value.percent }}%;">
+                    <span class="sr-only">{{ value.percent }}% Complete</span>
+                  </div>
+                </div>
+              </div>
+              <div class="w_right w_20">
+                <span>{{ value.total }}</span>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            {% endfor %}
+        </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
   </div>
           {% endblock content %}
 

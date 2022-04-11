@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import dotenv
 # import pymysql
 #
 # pymysql.install_as_MySQLdb()
@@ -19,14 +20,20 @@ import os
 # import rest_framework_simplejwt
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-j71t+kmuk*bo0f85@8y*#bll)apizup&yoh0(y99sl6(e-c^sx'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -70,7 +77,8 @@ INSTALLED_APPS = [
 #
 # }
 
-SITE_ID = 1
+SITE_ID = 3
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -131,8 +139,8 @@ WSGI_APPLICATION = 'users_management.wsgi.application'
 # sqllite (working)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE':  os.environ['ENGINE'],
+        'NAME':  BASE_DIR/'db.sqlite3',
     }
 }
 
@@ -149,12 +157,7 @@ DATABASES = {
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'usermanagement',
-#         'USER': 'user',
-#         'PASSWORD': 'Pinocchi0',
-#         'HOST': '192.168.0.118',   # Or an IP Address that your DB is hosted on
-#         'PORT': '3306',
+
 #     }
 # }
 
@@ -210,9 +213,10 @@ LOGIN_REDIRECT_URL = 'home' # OLD VERSION the login pages have been moved
 LOGIN_URL = 'users_login'
 
 # added
-MEDIA_ROOT = os.path.join(BASE_DIR, 'users','media')
-# MEDIA_ROOT = BASE_DIR
+MEDIA_ROOT = os.path.join(BASE_DIR, 'users','media') # MEDIA_ROOT = BASE_DIR
 MEDIA_URL = '/users/media/'
+
+
 
 # added to prevent API errors
 CORS_ORIGIN_ALLOW_ALL = True
@@ -223,10 +227,10 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 # email
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_PORT = 0
-DEFAULT_FROM_EMAIL = 'Grouping Project Admin'
+EMAIL_BACKEND = os.environ['EMAIL_BACKEND']
+EMAIL_USE_TLS = os.environ['EMAIL_USE_TLS']
+EMAIL_HOST = os.environ['EMAIL_HOST']
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_PORT = os.environ['EMAIL_PORT']
+DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']

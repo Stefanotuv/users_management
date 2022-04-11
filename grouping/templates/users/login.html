@@ -152,6 +152,22 @@ form .field input:focus::placeholder{
 .form-inner form .signup-link a:hover{
   text-decoration: underline;
 }
+
+.form-inner form .login-link{
+  text-align: center;
+  margin-top: 30px;
+}
+.form-inner form .pass-link a,
+.form-inner form .login-link a{
+  color: #1a75ff;
+  text-decoration: none;
+}
+.form-inner form .pass-link a:hover,
+.form-inner form .login-link a:hover{
+  text-decoration: underline;
+}
+
+
 form .btn{
   height: 50px;
   width: 100%;
@@ -238,6 +254,7 @@ form .btn input[type="submit"]{
               <div class="btn-layer"></div>
               <input type="submit" value="Signup">
             </div>
+              <div class="login-link">Already a member? <a href="">Login now</a></div>
           </form>
         </div>
       </div>
@@ -294,6 +311,7 @@ const loginText = document.querySelector(".title-text .login");
       const loginBtn = document.querySelector("label.login");
       const signupBtn = document.querySelector("label.signup");
       const signupLink = document.querySelector("form .signup-link a");
+      const loginLink = document.querySelector("form .login-link a");
       signupBtn.onclick = (()=>{
         loginForm.style.marginLeft = "-50%";
         loginText.style.marginLeft = "-50%";
@@ -306,7 +324,10 @@ const loginText = document.querySelector(".title-text .login");
         signupBtn.click();
         return false;
       });
-
+      loginLink.onclick = (()=>{
+        loginBtn.click();
+        return false;
+      });
 
 
 </script>

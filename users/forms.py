@@ -32,13 +32,10 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['name','email']
 
-
-
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['address','image']
-
 
 class UserLoginForm(LoginForm):
     email = forms.EmailField(),

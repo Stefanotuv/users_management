@@ -50,6 +50,7 @@ urlpatterns = [
 
     path('final/<pk>',ProjectFinalView.as_view(template_name='grouping/final.html'),name='project_final_view'),
 
+    path('copy/<pk>',ProjectCopyView.as_view(template_name='grouping/copy.html'),name='viewcopy'),
 
 
     path("settings",

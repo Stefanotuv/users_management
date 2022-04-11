@@ -9,5 +9,6 @@ openpyxl
 django-utils-six
 pandas
 xlsxwriter
-
+django-environ
+python-dotenv
 # djangorestframework-simplejwt

@@ -9,18 +9,6 @@
   <div class="right_col" role="main">
     <!-- top tiles -->
     <div class="row tile_count">
-{#        <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-12">#}
-{#          <div class="tile-stats">#}
-{#            <div class="icon"><i class="fa fa-caret-square-o-right" style="padding-bottom: 5px"></i></div>#}
-{#              <div class="count"><i>Create a New Project</i></div>#}
-{#          </div>#}
-{#        </div>#}
-{#        <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-12">#}
-{#          <div class="tile-stats">#}
-{#            <div class="icon"><i class="fa fa-list-alt" style="padding-bottom: 5px"></i></div>#}
-{#              <div class="count"><i>View Existing Projects</i></div>#}
-{#          </div>#}
-{#        </div>#}
 
     </div>
     <!-- /top tiles -->
@@ -30,20 +18,24 @@
 
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div class="x_panel">
-          <form action="" method="post">
+          <form action="{% url 'project_final_view' object.pk %}" method="post">
             {% csrf_token %}
             <div class="x_title">
-              <h2>Project: {{ project_name }} <small>Review the data before submitting</small></h2>
+              <h2>Project: {{ object.project_name }} <small>this project has already been submitted</small></h2>
                 <div style="overflow:auto;">
 
                   <div style="float:right;">
 
                         <a style="padding-right: 2em;" disabled href="{% url 'viewlist' %}" >Return to List</a>
+                    <div style="float:right;">
+                      <button type="submit" id="Btn" onclick="" name="Option" value="Save & Download" class="btn btn-success">
+                          <i class="fa fa-download" aria-hidden="true" style="padding-right: 1em;"></i>Download</button>
 
-                      <button disabled type="submit" id="Btn" onclick="" name="Performs_Checks" value="Performs_Checks" class="btn btn-success">
-                          <i class="fa fa-paper-plane" aria-hidden="true" style="padding-right: 1em;"></i>
-                          Submit Project
-                      </button>
+                    </div>
+{#                      <button disabled type="submit" id="Btn" onclick="" name="Performs_Checks" value="Performs_Checks" class="btn btn-success">#}
+{#                          <i class="fa fa-paper-plane" aria-hidden="true" style="padding-right: 1em;"></i>#}
+{#                          Submit Project#}
+{#                      </button>#}
 
                   </div>
                 </div>
