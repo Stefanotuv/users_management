@@ -6,5 +6,6 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-.env_variable
+.env_variables.html
 .env
+test.xlsx
