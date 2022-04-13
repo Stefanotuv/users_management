@@ -9,6 +9,8 @@ openpyxl
 django-utils-six
 pandas
 xlsxwriter
-django-environ
+# to use .env for production
 python-dotenv
+# to connect to autonomous
+cx_oracle
 # djangorestframework-simplejwt

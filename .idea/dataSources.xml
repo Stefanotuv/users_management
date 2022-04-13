@@ -15,5 +15,19 @@
       <jdbc-url>jdbc:mysql://localhost:3306/usermanagement</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="Oracle [Cloud]" uuid="01e0133c-7eab-4e26-922f-fd20da9a3172">
+      <driver-ref>05c9efeb-542c-4433-9173-ffa2021edea7</driver-ref>
+      <synchronize>true</synchronize>
+      <auto-commit>false</auto-commit>
+      <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
+      <jdbc-url>jdbc:oracle:oci:@db202204121539_medium</jdbc-url>
+      <jdbc-additional-properties>
+        <property name="TNSADMIN_DIR" value="$PROJECT_DIR$/../user_management_connect/network/admin" />
+      </jdbc-additional-properties>
+      <working-dir>$ProjectFileDir$</working-dir>
+      <vm-env>
+        <property name="ORACLE_HOME" value="path" />
+      </vm-env>
+    </data-source>
   </component>
 </project>

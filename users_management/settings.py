@@ -13,6 +13,14 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 import dotenv
+
+# https://www.oracle.com/database/technologies/instant-client/downloads.html
+# https://blogs.oracle.com/opal/post/how-to-connect-to-oracle-autonomous-cloud-databases
+# https://blogs.oracle.com/opal/post/connecting-to-oracle-cloud-autonomous-database-with-django
+import cx_Oracle
+
+cx_Oracle.init_oracle_client(lib_dir="/Users/stefano/Dropbox/NewDev/user_management_connect")
+
 # import pymysql
 #
 # pymysql.install_as_MySQLdb()
@@ -77,7 +85,7 @@ INSTALLED_APPS = [
 #
 # }
 
-SITE_ID = 3
+SITE_ID = 4
 
 
 MIDDLEWARE = [
@@ -137,12 +145,12 @@ WSGI_APPLICATION = 'users_management.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # sqllite (working)
-DATABASES = {
-    'default': {
-        'ENGINE':  os.environ['ENGINE'],
-        'NAME':  BASE_DIR/'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE':  os.environ['ENGINE'],
+#         'NAME':  BASE_DIR/'db.sqlite3',
+#     }
+# }
 
 
 # mysql test connection
@@ -155,11 +163,16 @@ DATABASES = {
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': os.environ['ENGINE'],
+        'NAME': os.environ['NAME'],
+        'USER':  os.environ['DB_USER'],
+        'PASSWORD':  os.environ['PASSWORD'],
+        # 'HOST':  os.environ['HOST'],
+        # 'PORT': '1522',
+    }
+}
 
 
 

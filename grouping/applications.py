@@ -235,7 +235,7 @@ job_function = [
 ]
 
 dictionary_contraints ={
-    "Nationality": [item.value for item in Nationality.objects.all()],
+    "Nationality": nationality, # [item.value for item in Nationality.objects.all()],
     "Job Title" : job_title,
     "Company Name": company,
     "Professional Category (PO team)": professional_category,
