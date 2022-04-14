@@ -19,7 +19,6 @@ import dotenv
 # https://blogs.oracle.com/opal/post/connecting-to-oracle-cloud-autonomous-database-with-django
 import cx_Oracle
 
-cx_Oracle.init_oracle_client(lib_dir="/Users/stefano/Dropbox/NewDev/user_management_connect")
 
 # import pymysql
 #
@@ -33,6 +32,11 @@ cx_Oracle.init_oracle_client(lib_dir="/Users/stefano/Dropbox/NewDev/user_managem
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+if os.environ['ENVIRONMENT'] =='prod':
+    cx_Oracle.init_oracle_client(lib_dir="/Users/stefano/Dropbox/NewDev/user_management_connect")
+else:
+    cx_Oracle.init_oracle_client(lib_dir="/Users/stefano/Dropbox/NewDev/user_management_connect")
 
 dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
