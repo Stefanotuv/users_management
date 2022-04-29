@@ -136,7 +136,6 @@ TEMPLATES = [
             ],
             'libraries': {
                 'get_item': 'grouping.templatetags.get_item',
-
             },
         },
     },
