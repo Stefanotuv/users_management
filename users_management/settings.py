@@ -42,8 +42,13 @@ if os.path.isfile(dotenv_file):
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 if os.environ['ENVIRONMENT'] =='prod':
     cx_Oracle.init_oracle_client(lib_dir="/home/ubuntu/project_grouping/connect/instantclient_21_5")
-else:
+elif os.environ['ENVIRONMENT'] =='test':
     cx_Oracle.init_oracle_client(lib_dir="/Users/stefano/Dropbox/NewDev/user_management_connect")
+else:
+    # do nothing as in dev the app uses sqlite to make testing easier
+    pass
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
 
