@@ -277,6 +277,7 @@ class UserProfileChangePictureView(UpdateView):
         mylist = ['/'+f for f in glob.glob("users/media/profile_pics/gallery/*.*")]
         # context = self.get_context_data(**kwargs)
         context = {'mylist': mylist}
+        print(mylist)
         return render(request, 'users/profile_change_picture.html', context)
 
     def post(self, request, *args, **kwargs):
