@@ -125,6 +125,7 @@ TEMPLATES = [
                  os.path.join(BASE_DIR, 'grouping/templates'),
                  os.path.join(BASE_DIR, 'grouping'),
                  os.path.join(BASE_DIR, 'grouping/templates/grouping'),
+                 os.path.join(BASE_DIR, 'grouping/templates/users'),
 
                  os.path.join(BASE_DIR, 'gentelelladjango/templates'),
                  os.path.join(BASE_DIR, 'gentelelladjango'),
