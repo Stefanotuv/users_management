@@ -275,7 +275,12 @@ class UserProfileChangePictureView(UpdateView):
         # }
         # os.getcwd() # get the current work directory
 
-        # mylist = ['/'+f for f in glob.glob("users/media/profile_pics/gallery/*.*")]
+        mylist2 = ['/'+f for f in glob.glob("users/media/profile_pics/gallery/*.*")]
+        print('mylist2:')
+        print(mylist2)
+        mylist3 = ['/'+f for f in glob.glob("/home/ubuntu/project_grouping/users_management/users/media/profile_pics/gallery/*.*")]
+        print('mylist3:')
+        print(mylist3)
 
         # current_dir = os. getcwd()
         # print('current_dir:')
@@ -289,8 +294,8 @@ class UserProfileChangePictureView(UpdateView):
 
         # print('glob.glob:')
         # print(glob.glob("users/media/profile_pics/gallery/*.*"))
-        # print('mylist:')
-        # print(mylist)
+        print('mylist:')
+        print(mylist)
         return render(request, 'users/profile_change_picture.html', context)
 
     def post(self, request, *args, **kwargs):
