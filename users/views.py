@@ -288,7 +288,9 @@ class UserProfileChangePictureView(UpdateView):
         # print(settings.BASE_DIR)
         rdir = "users/media/profile_pics/gallery"
         # rdir = os.path.join(settings.MEDIA_ROOT,"profile_pics/gallery")
-        mylist = ['/'+f for f in [os.path.join(rdir, fil) for fil in os.listdir(rdir)]]
+        files = os.listdir(rdir)
+        files_path = [os.path.join(rdir, fil) for fil in files]
+        mylist = ['/'+f for f in files_path]
         # # context = self.get_context_data(**kwargs)
         context = {'mylist': mylist}
 
