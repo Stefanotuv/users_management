@@ -275,12 +275,12 @@ class UserProfileChangePictureView(UpdateView):
         # }
         # os.getcwd() # get the current work directory
 
-        mylist2 = ['/'+f for f in glob.glob("users/media/profile_pics/gallery/*.*")]
-        print('mylist2:')
-        print(mylist2)
-        mylist3 = [f for f in glob.glob("/home/ubuntu/project_grouping/users_management/users/media/profile_pics/gallery/*.*")]
-        print('mylist3:')
-        print(mylist3)
+        # mylist2 = ['/'+f for f in glob.glob("users/media/profile_pics/gallery/*.*")]
+        # print('mylist2:')
+        # print(mylist2)
+        # mylist3 = [f for f in glob.glob("/home/ubuntu/project_grouping/users_management/users/media/profile_pics/gallery/*.*")]
+        # print('mylist3:')
+        # print(mylist3)
 
         # current_dir = os. getcwd()
         # print('current_dir:')
@@ -288,9 +288,9 @@ class UserProfileChangePictureView(UpdateView):
         # print(settings.BASE_DIR)
         rdir = "users/media/profile_pics/gallery"
         # rdir = os.path.join(settings.MEDIA_ROOT,"profile_pics/gallery")
-        # mylist = ['/'+f for f in [os.path.join(rdir, fil) for fil in os.listdir(rdir)]]
+        mylist = ['/'+f for f in [os.path.join(rdir, fil) for fil in os.listdir(rdir)]]
         # # context = self.get_context_data(**kwargs)
-        context = {'mylist': mylist3}
+        context = {'mylist': mylist}
 
         # print('glob.glob:')
         # print(glob.glob("users/media/profile_pics/gallery/*.*"))
