@@ -166,16 +166,28 @@ WSGI_APPLICATION = 'users_management.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': os.environ['ENGINE'],
-        'NAME': os.environ['NAME'],
-        'USER':  os.environ['DB_USER'],
-        'PASSWORD':  os.environ['PASSWORD'],
-        # 'HOST':  os.environ['HOST'],
-        # 'PORT': '1522',
+if os.environ['ENVIRONMENT'] =='prod':
+    # Oracle connection
+    DATABASES = {
+        'default': {
+            'ENGINE': os.environ['ENGINE'],
+            'NAME': os.environ['NAME'],
+            'USER': os.environ['DB_USER'],
+            'PASSWORD': os.environ['PASSWORD'],
+            # 'HOST':  os.environ['HOST'],
+            # 'PORT': '1522',
+        }
     }
-}
+
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE':  'django.db.backends.sqlite3',
+            'NAME':  BASE_DIR/'db.sqlite3',
+        }
+    }
+
+
 
 
 
