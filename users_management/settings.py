@@ -118,8 +118,8 @@ TEMPLATES = [
                  os.path.join(BASE_DIR, 'grouping/users/templates'),
 
                  # old
-                 os.path.join(BASE_DIR, 'users/templates'),
-                 os.path.join(BASE_DIR, 'users'),
+                 # os.path.join(BASE_DIR, 'users/templates'),
+                 # os.path.join(BASE_DIR, 'users'),
 
                  # the order is important if there is an overalaps of names
                  os.path.join(BASE_DIR, 'grouping/templates'),
