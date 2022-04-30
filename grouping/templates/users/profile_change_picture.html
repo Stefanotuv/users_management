@@ -131,7 +131,7 @@ h1 {
                 {% for file in mylist %}
                      <div class="column nature col-md-3 col-sm-3 col-xs-12" onclick="handle_click(this)">
                         <div name="image_div" class="thumbnail image view-first" style="border-radius: 2em;">
-                          <img src="{{ MEDIA_ROOT }}{{ file }}" alt="" style="width:50%">
+                          <img src="{{ file }}" alt="" style="width:50%">
                         </div>
                       </div>
                 {% endfor %}
