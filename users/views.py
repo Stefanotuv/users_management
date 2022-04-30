@@ -278,7 +278,7 @@ class UserProfileChangePictureView(UpdateView):
         mylist2 = ['/'+f for f in glob.glob("users/media/profile_pics/gallery/*.*")]
         print('mylist2:')
         print(mylist2)
-        mylist3 = ['/'+f for f in glob.glob("/home/ubuntu/project_grouping/users_management/users/media/profile_pics/gallery/*.*")]
+        mylist3 = [f for f in glob.glob("/home/ubuntu/project_grouping/users_management/users/media/profile_pics/gallery/*.*")]
         print('mylist3:')
         print(mylist3)
 
