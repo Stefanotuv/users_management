@@ -283,13 +283,12 @@ class UserProfileChangePictureView(UpdateView):
         print(settings.BASE_DIR)
         # rdir = "users/media/profile_pics/gallery"
         rdir = os.path.join(settings.BASE_DIR,"users/media/profile_pics/gallery")
-        mylist = ['/'+f for f in [os.path.join(rdir, fil) for fil in os.listdir(rdir)]]
+        mylist = [f for f in [os.path.join(rdir, fil) for fil in os.listdir(rdir)]]
         # context = self.get_context_data(**kwargs)
         context = {'mylist': mylist}
 
         print('glob.glob:')
         print(glob.glob("users/media/profile_pics/gallery/*.*"))
-
         print('mylist:')
         print(mylist)
         return render(request, 'users/profile_change_picture.html', context)
