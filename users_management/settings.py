@@ -247,8 +247,8 @@ LOGIN_REDIRECT_URL = 'home' # OLD VERSION the login pages have been moved
 LOGIN_URL = 'users_login'
 
 # added
-MEDIA_ROOT = os.path.join(BASE_DIR, 'users','media') # MEDIA_ROOT = BASE_DIR
-MEDIA_URL = '/users/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # MEDIA_ROOT = BASE_DIR
+MEDIA_URL = '/media/'
 
 # added for prod to launch the collect static command
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
