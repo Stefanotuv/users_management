@@ -295,7 +295,7 @@ class UserProfileChangePictureView(UpdateView):
         # print('glob.glob:')
         # print(glob.glob("users/media/profile_pics/gallery/*.*"))
         print('mylist:')
-        print(mylist)
+        # print(mylist)
         return render(request, 'users/profile_change_picture.html', context)
 
     def post(self, request, *args, **kwargs):
