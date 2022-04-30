@@ -278,9 +278,6 @@ class UserProfileChangePictureView(UpdateView):
         # context = self.get_context_data(**kwargs)
         context = {'mylist': mylist}
 
-        print('glob:')
-        print(glob("users/media/profile_pics/gallery/*.*"))
-
         print('glob.glob:')
         print(glob.glob("users/media/profile_pics/gallery/*.*"))
 
