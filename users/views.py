@@ -317,7 +317,7 @@ class UserProfileChangePictureView(UpdateView):
 
             pre_path = os.getcwd()
             path_suf = request.POST['selected'].split('/grouping')[1]
-            new_path = Path(pre_path + '/grouping' + path_suf)
+            new_path = Path(pre_path + 'user_management/grouping' + path_suf)
             image_url = new_path
             initial_path = user.profile.image.name
 
