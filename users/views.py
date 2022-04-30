@@ -317,6 +317,7 @@ class UserProfileChangePictureView(UpdateView):
 
             pre_path = os.getcwd()
             path_suf = request.POST['selected'].split('/grouping')[1]
+
             if 'users_management' in pre_path:
                 new_path = Path(pre_path + '/grouping' + path_suf)
             else:
