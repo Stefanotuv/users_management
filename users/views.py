@@ -274,7 +274,9 @@ class UserProfileChangePictureView(UpdateView):
         # }
         # os.getcwd() # get the current work directory
 
-        mylist = ['/'+f for f in glob.glob("users/media/profile_pics/gallery/*.*")]
+        # mylist = ['/'+f for f in glob.glob("users/media/profile_pics/gallery/*.*")]
+        rdir = "users/media/profile_pics/gallery"
+        mylist = ['/'+f for f in [os.path.join(rdir, fil) for fil in os.listdir(rdir)]]
         # context = self.get_context_data(**kwargs)
         context = {'mylist': mylist}
 
