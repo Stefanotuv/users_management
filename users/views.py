@@ -48,6 +48,7 @@ from allauth.account.utils import (
 )
 
 import glob
+from django.conf import settings
 
 def activate(request, uidb64, token):
     try:
@@ -279,9 +280,9 @@ class UserProfileChangePictureView(UpdateView):
         current_dir = os. getcwd()
         print('current_dir:')
         print(current_dir)
-
+        print(settings.BASE_DIR)
         # rdir = "users/media/profile_pics/gallery"
-        rdir = os.path.join(current_dir,"users/media/profile_pics/gallery")
+        rdir = os.path.join(settings.BASE_DIR,"users/media/profile_pics/gallery")
         mylist = ['/'+f for f in [os.path.join(rdir, fil) for fil in os.listdir(rdir)]]
         # context = self.get_context_data(**kwargs)
         context = {'mylist': mylist}
