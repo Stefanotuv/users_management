@@ -184,6 +184,18 @@ if os.environ['ENVIRONMENT'] =='prod':
             # 'PORT': '1522',
         }
     }
+elif os.environ['ENVIRONMENT'] =='test':
+    # Oracle connection
+    DATABASES = {
+        'default': {
+            'ENGINE': os.environ['ENGINE'],
+            'NAME': os.environ['NAME'],
+            'USER': os.environ['DB_USER'],
+            'PASSWORD': os.environ['PASSWORD'],
+            # 'HOST':  os.environ['HOST'],
+            # 'PORT': '1522',
+        }
+    }
 
 else:
     DATABASES = {
