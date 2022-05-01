@@ -93,8 +93,14 @@ INSTALLED_APPS = [
 #     )
 #
 # }
-
-SITE_ID = 2
+if os.environ['ENVIRONMENT'] =='prod':
+    SITE_ID = 4
+elif os.environ['ENVIRONMENT'] =='test':
+    SITE_ID = 4
+elif os.environ['ENVIRONMENT'] =='dev':
+    SITE_ID = 2
+else:
+    pass
 
 
 MIDDLEWARE = [
