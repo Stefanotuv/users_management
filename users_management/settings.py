@@ -41,7 +41,10 @@ if os.path.isfile(dotenv_file):
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 if os.environ['ENVIRONMENT'] =='prod':
-    cx_Oracle.init_oracle_client(lib_dir="/home/ubuntu/project_grouping/connect/instantclient_21_5")
+    if os.environ['ENVIRONMENT'] == 'ARM':
+        cx_Oracle.init_oracle_client(lib_dir="/home/ubuntu/project_grouping/connect/instantclient_19_10")
+    else:
+        cx_Oracle.init_oracle_client(lib_dir="/home/ubuntu/project_grouping/connect/instantclient_21_5")
 elif os.environ['ENVIRONMENT'] =='test':
     cx_Oracle.init_oracle_client(lib_dir="/Users/stefano/Dropbox/NewDev/user_management_connect")
 else:
