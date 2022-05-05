@@ -42,7 +42,7 @@ if os.path.isfile(dotenv_file):
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 if os.environ['ENVIRONMENT'] =='prod':
     if os.environ['PROCESSOR'] == 'ARM':
-        cx_Oracle.init_oracle_client(lib_dir="/home/ubuntu/project_grouping/connect/instantclient_19_10")
+        cx_Oracle.init_oracle_client(lib_dir="/home/ubuntu/project_grouping/connect/instantclient_19_10",config_dir="/home/ubuntu/project_grouping/connect/instantclient_19_10/network/admin")
     else:
         cx_Oracle.init_oracle_client(lib_dir="/home/ubuntu/project_grouping/connect/instantclient_21_5")
 elif os.environ['ENVIRONMENT'] =='test':
