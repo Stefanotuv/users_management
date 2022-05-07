@@ -16,3 +16,9 @@ Add analytics:
 
 modal how to can be found here. there is also a django generated view
 https://medium.com/@antoinewg/simple-modal-to-open-details-of-an-item-django-bootstrap-ffeeb11f12c1
+
+TODO: default image for profile to be adjusted
+TODO: check the file excel save
+TODO: do the test with the full file excel
+TODO: add loader for the loading of the file excel and from the operations
+TODO: make the table to display only the first 20-50 items at a time

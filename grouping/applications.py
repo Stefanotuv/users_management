@@ -4,13 +4,13 @@ default_dimensions = [
     'LBSNo','Stream','Group','First Name','Known Name','Surname','Nationality','Nationality Region','Gender','Age',
     'Relevant Experience','Country of Residence','CoR Region','GMAT Score(total)','Quant','English Mother Tongue',
     'English Scores','Job Title','Company Name','City (Employment)','Country(Employment)',
-    'Professional Category (PO team)','Job Function','Email Address','School Email','Q Score','Q Score %','V Score',
+    'Professional Category (PO Team)','Job Function','Email Address','School Email','Q Score','Q Score %','V Score',
     'V Score %','AW Score','AW Score  %','IR Score','IR Score  %','Second Nationality','Home City','Microeconomics Waiver',
     'Macroeconomics Waiver','DAM Waiver','Visa at risk',
 ]
 
 mandatory_dimensions = ["nationality","job_title","company","professional_category","job_function","GMAT", "Age"]
-
+mandatory_list = ["Nationality",'Job Title','Company Name','Professional Category (PO Team)','Job Function','GMAT Score(total)', "Age"]
 nationality =[
     'Afghanistan',
     'Albania',
@@ -238,7 +238,7 @@ dictionary_contraints ={
     "Nationality": nationality, # [item.value for item in Nationality.objects.all()],
     "Job Title" : job_title,
     "Company Name": company,
-    "Professional Category (PO team)": professional_category,
+    "Professional Category (PO Team)": professional_category,
     "Job Function": job_function,
 }
 
@@ -271,21 +271,26 @@ class ReviewConstraints():
                 if key_constrains.casefold() in map(str.casefold,excluded_list):
                     pass
                 else:
-                    if (dictionary_candidate[key_candidate][key_constrains].casefold() not in map(str.casefold,dictionary_contraints[key_constrains])):
-                        # record the not matched values (it should be a list od candidates and columns)
-                        if key_candidate in dictionary_candidate_unmatched_fields.keys():
-                            # dictionary_candidate_unmatched_fields[key_candidate].append(key_constrains + ': ' + dictionary_candidate[key_candidate][key_constrains])
-                            dictionary_candidate_unmatched_fields[key_candidate].append(
-                                key_constrains)
-                        else:
-
-                            dictionary_candidate_unmatched_fields[key_candidate] = []
-                            # dictionary_candidate_unmatched_fields[key_candidate].append(key_constrains + ': ' + dictionary_candidate[key_candidate][key_constrains])
-                            dictionary_candidate_unmatched_fields[key_candidate].append(key_constrains)
+                    if len(dictionary_contraints[key_constrains])==0:
                         pass
                     else:
+                        if (dictionary_candidate[key_candidate][key_constrains].casefold() in
+                                map(str.casefold,dictionary_contraints[key_constrains])):
+                            # record the not matched values (it should be a list od candidates and columns)
+                            pass
+                        else:
 
-                        pass
+                            if key_candidate in dictionary_candidate_unmatched_fields.keys():
+                                # dictionary_candidate_unmatched_fields[key_candidate].append(key_constrains + ': ' + dictionary_candidate[key_candidate][key_constrains])
+                                dictionary_candidate_unmatched_fields[key_candidate].append(
+                                    key_constrains)
+                            else:
+
+                                dictionary_candidate_unmatched_fields[key_candidate] = []
+                                # dictionary_candidate_unmatched_fields[key_candidate].append(key_constrains + ': ' + dictionary_candidate[key_candidate][key_constrains])
+                                dictionary_candidate_unmatched_fields[key_candidate].append(key_constrains)
+                            pass
+
 
         return dictionary_candidate_unmatched_fields
 
@@ -296,7 +301,7 @@ class ReviewConstraints():
             "Nationality": [n.value for n in Nationality.objects.all()],
             "Job Title":  [JT.value for JT in JobTitle.objects.all()],
             "Company Name":  [C.value for C in Company.objects.all()],
-            "Professional Category (PO team)":  [PC.value for PC in ProfessionalCategory.objects.all()],
+            "Professional Category (PO Team)":  [PC.value for PC in ProfessionalCategory.objects.all()],
             "Job Function":  [JF.value for JF in JobFunction.objects.all()],
         }
 
@@ -304,6 +309,7 @@ class ReviewConstraints():
         issues_table = {}
         candidate_with_issues_list = []
         table_headers =['issue type','content','comments']
+
         missing_headers = self.check_mandatory_fields(mandatory_list,input_list)[1]
         dictionary_candidate_unmatched_fields = self.check_fields_inclusion(dictionary_candidate, dictionary_contraints_from_DB, missing_headers)
         index = 0

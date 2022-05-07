@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, TemplateView, FormView, DetailView, UpdateView, CreateView
 from .models import *
 from .applications import ReviewConstraints, default_dimensions, dictionary_contraints, job_function, professional_category, company, job_title, mandatory_dimensions
-from .applications import nationality, Calculations
+from .applications import nationality, Calculations, mandatory_list
 from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.urls import reverse
 import openpyxl
@@ -27,6 +27,9 @@ import sys
 # HomeView, CreateProjectView, ProjectView, ProjectListView
 
 import pandas as pd
+
+
+
 
 @method_decorator(login_required, name='dispatch')
 class ProjectListView(ListView):
@@ -126,7 +129,10 @@ class ProjectCreateFromFileView(CreateView):
 
         if (len(request.FILES)!=0) :
 
+
             excel_file = request.FILES["input_file"]
+
+            # transform the excel to json
             json_file = excel_to_json(excel_file)
 
             # create the project
@@ -216,12 +222,19 @@ class ProjectReviewView(UpdateView):
         else:
 
             context['pk'] = context['object'].pk # to capture the pk of the project to be updated
-            context['json_file'] =self.request.session['json_file']
-            context['json_file_filename'] = self.request.session['json_file_filename']
-            context['json_file_headers'] = self.request.session['json_file_headers']
-            context['json_file_candidates'] = self.request.session['json_file_candidates']
-            context['json_file_candidates_list'] = self.request.session['json_file_candidates_list']
-            context['json_file_candidates_dictionary'] = self.request.session['json_file_candidates_dictionary']
+            json_file = context['object'].json_document
+            context['json_file'] = json_file
+            context['json_file_filename'] = json_file['file_name']
+            context['json_file_headers'] = json_file['headers']
+            context['json_file_candidates'] = json_file['candidates']
+            context['json_file_candidates_list'] = json_file['candidates_list']
+            context['json_file_candidates_dictionary'] = json_file['candidates_dictionary']
+            # context['json_file'] =self.request.session['json_file']
+            # context['json_file_filename'] = self.request.session['json_file_filename']
+            # context['json_file_headers'] = self.request.session['json_file_headers']
+            # context['json_file_candidates'] = self.request.session['json_file_candidates']
+            # context['json_file_candidates_list'] = self.request.session['json_file_candidates_list']
+            # context['json_file_candidates_dictionary'] = self.request.session['json_file_candidates_dictionary']
             # context['not_found_list'] = self.request.session['not_found_list']
             # context['check_value_columuns'] = self.request.session['check_value_columuns']
             # context['candidate_with_issues_list'] = self.request.session['candidate_with_issues_list']
@@ -264,7 +277,7 @@ class ProjectReviewView(UpdateView):
         candidates_dictionary = headers_json_table[4]
         review = ReviewConstraints()
 
-        table_headers_issues_table_candidate_with_issues_list = review.issues_table(default_dimensions,headers,json_table,dictionary_contraints)
+        table_headers_issues_table_candidate_with_issues_list = review.issues_table(mandatory_list,headers,json_table,dictionary_contraints)
         table_headers = table_headers_issues_table_candidate_with_issues_list[0]
         issues_table = table_headers_issues_table_candidate_with_issues_list[1]
         dictionary_candidate_unmatched_fields = table_headers_issues_table_candidate_with_issues_list[2]
@@ -275,6 +288,13 @@ class ProjectReviewView(UpdateView):
         project.json_document['table_headers'] = table_headers
         project.json_document['dictionary_candidate_unmatched_fields'] = dictionary_candidate_unmatched_fields
         project.last_modified = datetime.now()
+        json_table = headers_json_table[1]
+
+        project.json_document['headers'] = headers
+        project.json_document['candidates'] = candidates
+        project.json_document['candidates_list'] = candidates_list
+        project.json_document['candidates_dictionary'] = candidates_dictionary
+
 
         project.save()
 
@@ -372,7 +392,7 @@ class ProjectReviewedView(UpdateView):
 
         review = ReviewConstraints()
 
-        table_headers_issues_table_candidate_with_issues_list = review.issues_table(default_dimensions,headers,json_table,dictionary_contraints)
+        table_headers_issues_table_candidate_with_issues_list = review.issues_table(mandatory_list,headers,json_table,dictionary_contraints)
         table_headers = table_headers_issues_table_candidate_with_issues_list[0]
         issues_table = table_headers_issues_table_candidate_with_issues_list[1]
         dictionary_candidate_unmatched_fields = table_headers_issues_table_candidate_with_issues_list[2]
@@ -392,6 +412,12 @@ class ProjectReviewedView(UpdateView):
         project.json_document['table_headers'] = table_headers
         project.json_document['dictionary_candidate_unmatched_fields'] = dictionary_candidate_unmatched_fields
 
+        project.json_document['headers'] = headers
+        project.json_document['candidates'] = candidates
+        project.json_document['candidates_list'] = candidates_list
+        project.json_document['candidates_dictionary'] = candidates_dictionary
+
+
         self.request.session['json_file'] = json_document['file_name']
         self.request.session['json_file_filename'] = json_document['file_name']
         self.request.session['json_file_headers'] = headers
@@ -404,9 +430,9 @@ class ProjectReviewedView(UpdateView):
 
             project.status = 'reviewed'
 
-            project.json_document['candidates'] = candidates
-            project.json_document['candidates_list'] = candidates_list
-            project.json_document['candidates_dictionary'] = candidates_dictionary
+            # project.json_document['candidates'] = candidates
+            # project.json_document['candidates_list'] = candidates_list
+            # project.json_document['candidates_dictionary'] = candidates_dictionary
             project.last_modified = datetime.now()
             project.save()
 
@@ -435,9 +461,9 @@ class ProjectReviewedView(UpdateView):
         else:
             # get back on the review as errors still exist
             # create a variable to be used in the review returned after the submission
-            project.json_document['candidates'] = candidates
-            project.json_document['candidates_list'] = candidates_list
-            project.json_document['candidates_dictionary'] = candidates_dictionary
+            # project.json_document['candidates'] = candidates
+            # project.json_document['candidates_list'] = candidates_list
+            # project.json_document['candidates_dictionary'] = candidates_dictionary
             project.last_modified = datetime.now()
             project.save()
 
@@ -818,7 +844,6 @@ class ProjectDeleteView(UpdateView):
             pass
 
         return HttpResponseRedirect(reverse('viewlist'))
-
 
 @method_decorator(login_required, name='dispatch')
 class ProjectCopyView(UpdateView):
