@@ -436,7 +436,7 @@ class Calculations():
         gmat_min = 800
         for candidate in candidates_dictionary.values():
             score = candidate['GMAT Score(total)']
-            if (score != None) and (score !='None'):
+            if (score != None) and (score !='None') and (score.isdigit()):
                 if int(score) >= gmat_max:
                     gmat_max = int(score)
                 if int(score) <= gmat_min:
