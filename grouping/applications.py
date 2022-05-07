@@ -436,6 +436,10 @@ class Calculations():
         gmat_min = 800
         for candidate in candidates_dictionary.values():
             score = candidate['GMAT Score(total)']
+            print('candidate:')
+            print(candidate['First Name'])
+            print('score:')
+            print(candidate['GMAT Score(total)'])
             if (score != None) and (score !='None') and (score.isdigit()):
                 if int(score) >= gmat_max:
                     gmat_max = int(score)
@@ -454,7 +458,7 @@ class Calculations():
 
         for candidate in candidates_dictionary.values():
             score = candidate['GMAT Score(total)']
-            if score != None and score != 'None':
+            if score != None and score != 'None' and (score.isdigit()):
                 if int(score) <= 500:
                     if candidate['Gender'] == 'Male':
                         gmat_range[500]['male'] = gmat_range[500]['male'] + 1
@@ -562,7 +566,7 @@ class Calculations():
 
         for candidate in candidates_dictionary.values():
 
-            if candidate['Age'] != None and candidate['GMAT Score(total)'] != 'None':
+            if candidate['Age'] != None and candidate['Age'].isdigit() and candidate['GMAT Score(total)'] != 'None' and candidate['GMAT Score(total)'] != None and candidate['GMAT Score(total)'].isdigit():
                 age = int(candidate['Age'].split('.')[0])
                 gmat = int(candidate['GMAT Score(total)'].split('.')[0])
 
